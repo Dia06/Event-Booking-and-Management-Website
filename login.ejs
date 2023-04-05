@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style1.css">
+    <!-- Favicon-->
+    <link rel="icon" href="images\disco-pink.jpg">
+    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <title>login and registration form</title>
+</head>
+<body>
+
+<!-- page -->
+    <div class="hero">
+
+        <div class="form-box">
+            <div class="button-box">
+                <div id="btn"></div>
+                    <button type="button" class="toggle-btn" onclick="login()" >Log In</button>
+                    <button type="button" class="toggle-btn" onclick="register()" >Register</button>
+                    <!-- <a href="signUp.html" class="toggle-btn" onclick="register()">Log In</a> -->
+            </div>
+
+<!-- login -->
+            <form id="login" class="input-group" action="/login" method="post">
+
+                <label for="email">Email:
+                    <input class="input-field" id="checkemail" placeholder="Email" required type="text" name="checkemail" required>
+                </label>
+                <br><br><br><br>
+                <label for="password">Password:
+                    <input type="password" id="checkpass"class="input-field" placeholder="Enter Password" required type="text" name="checkpassword" required>
+                </label>
+                <br><br><br><br><br>
+
+                <button class="submit-btn" type="submit" value="login"> Log In</button>
+
+            </form>
+<!-- register -->
+
+            <form id="register" class="input-group_" action="/signUp" method="post">
+
+                <label for="Email">Email:<br>
+                    <input class="input-field" id='email' placeholder="Email" required type="text" name="email"  required>
+                </label>
+                <br>
+
+                <label  for="password">Password:
+                    <input type="password" id='pass' class="input-field" placeholder="Password" required type="text" name="password" required>
+                </label>
+                <br>
+
+                <label  for="fname">First Name:
+                    <input class="input-field" id='fname' placeholder="John" type="text" name="fname" pattern="[a-zA-Z]{2,}" required>
+                </label>
+                <br>
+
+                <label  for="lname">Last Name:
+                    <input class="input-field" id='lname' placeholder="Doe" type="text" name="lname" pattern="[a-zA-Z]{2,}" required>
+                </label>
+                <br>
+
+                <label for="gender">Gender:
+                    <input class="input-field" id="gender" placeholder="M/ F/ O" type="text" name="gender" maxlength="1" >
+                </label>
+
+                <br><br><br>
+
+                <input class="submit-btn" type="submit" value="Register" >
+            </form>
+
+        </div>
+    </div>
+
+
+
+
+
+<script>
+    $("#login").submit(function(e){
+        e.preventDefault();
+
+        var form= $(this);
+
+        $.ajax({
+          type:"post",
+          url: '/login',
+          data: form.serialize(), // serializes the form's elements.
+          success: function(data)
+          {
+            alert(data); // show response from the php script.
+             if(data=="You are logged in!"){
+               location.reload();
+             }
+            
+          }
+      });
+
+    });
+
+    $("#register").submit(function(e) {
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+
+
+        $.ajax({
+            type: "post",
+            url: '/register',
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data)
+            {
+            alert(data); // show response from the php script.
+            
+            }
+        });
+
+    });
+
+    window.addEventListener('load',function(){
+    var fname = document.getElementById("fname");
+    var lname = document.getElementById("lname");
+    var email = document.getElementById("email");
+    var pass = document.getElementById("pass");
+    var gender = document.getElementById("gender");
+    var checkemail = document.getElementById("checkemail");
+    var checkpass = document.getElementById("checkpass");
+
+    fname.addEventListener("input", (n) => {
+      const fnameval = n.currentTarget.value;
+      if ( fnameval.length<2 || fname.validity.valueMissing ) {
+        fname.setCustomValidity("Name must be atleast 2 characters long.");
+        fname.reportValidity();
+      } else { fname.setCustomValidity(""); }
+    });
+
+    lname.addEventListener("input", (n) => {
+      const lnameval = n.currentTarget.value;
+      if ( lnameval.length<1 || lname.validity.valueMissing ) {
+        lname.setCustomValidity("Last name must be atleast 1 character long.");
+        lname.reportValidity();
+      } else { lname.setCustomValidity(""); }
+    });
+
+
+    email.addEventListener("input", (n) => {
+      const emailval = n.currentTarget.value;
+      var pattern= /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if ( !emailval.match(pattern) || email.validity.valueMissing ) {
+        email.setCustomValidity("Mail must be valid.");
+        email.reportValidity();
+      } else { email.setCustomValidity(""); }
+    });
+
+    pass.addEventListener("input", (n) => {
+      const passval = n.currentTarget.value;
+      var pattern= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+      if ( !passval.match(pattern) || pass.validity.valueMissing ) {
+        pass.setCustomValidity("Password must be 6 characters long and contain atleast 1 uppercase,1 digit & 1 special character.");
+        pass.reportValidity();
+      } else { pass.setCustomValidity(""); }
+    });
+
+    checkemail.addEventListener("input", (n) => {
+      const emailval = n.currentTarget.value;
+      var pattern= /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if ( !emailval.match(pattern) || checkemail.validity.valueMissing ) {
+        checkemail.setCustomValidity("Mail must be valid.");
+        checkemail.reportValidity();
+      } else { checkemail.setCustomValidity(""); }
+    });
+
+    checkpass.addEventListener("input", (n) => {
+      const passval = n.currentTarget.value;
+      var pattern= /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{6,}$/;
+      if ( !passval.match(pattern) || checkpass.validity.valueMissing ) {
+        checkpass.setCustomValidity("Password must be 6 characters long and contain atleast 1 uppercase,1 digit & 1 special character.");
+        checkpass.reportValidity();
+      } else { checkpass.setCustomValidity(""); }
+    });
+
+  });
+  //transition 
+    var x = document.getElementById("login");
+    var y = document.getElementById("register");
+    var z = document.getElementById("btn");
+
+    function register(){
+        x.style.left = "-800px";
+        y.style.left = "110px";
+        z.style.left = "110px";
+    }
+
+    function login(){
+        x.style.left = "110px";
+        y.style.left = "800px";
+        z.style.left = "0px";
+    }
+
+</script>
+
+</body>
+</html>
+
+

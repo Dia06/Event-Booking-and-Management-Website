@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<!-- <title>RegistrationForm_v4 by Colorlib</title> -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+		<!-- STYLE CSS -->
+		<link rel="stylesheet" href="css/form.css">
+		<link rel="stylesheet" href="css/style.css">
+		<!-- Favicon-->
+		<link rel="icon" href="images\disco-pink.jpg">
+		<title>Booking form</title>
+	</head>
+	<header class="header">
+
+        <a href="home" class="logo"><img src="images\name.jpg" alt="Smiley face" width="150" height="50" style="float:left"></a>
+    
+        <nav class="navbar">
+            <a href="home">home</a>
+            <!-- <a href="#service">service</a>
+            <a href="#about">about</a>
+            <a href="#gallery">gallery</a>
+            <a href="#price">price</a>
+            <a href="#review">review</a>
+            <a href="#contact">contact</a> -->
+        </nav>
+    
+        <div id="menu-bars" class="fas fa-bars"></div>
+    
+    </header>
+
+	<body>
+		<div class="wrapper">
+			<div class="inner">
+				<div class="image-holder">
+					<img src="images/form.jpg" width="550px" height="650px"  alt="">
+				</div>
+				<form id="booking" action="/book" method="post">
+					<h3>Book now</h3>
+					<div class="form-holder active">
+						<input type="text" id="name" placeholder="name" class="form-control" name="name">
+					</div>
+					<div class="form-holder">
+						<input type="text" id="phone" placeholder="phone number " class="form-control" name="phone">
+					</div>
+					<div class="form-holder">
+						<input type="text" id="venue" placeholder="Venue" class="form-control" name="venue">
+					</div>
+					<div class="form-holder">
+							<input type="date" id="datefield" placeholder="Date" class="form-control" name="date">
+					</div>
+	
+					<div class="form-holder" >
+						<select name="event" id="event" class="form-control" name="event">	
+						<option value="" >SELECT EVENT </option>						
+						<option value="Birthday">Birthday</option>
+						<option value="Wedding">Wedding</option>
+						<option value="Anniversary">Anniversary</option>
+						<option value="Get together">Get together</option>
+						<option value="Workshops">Workshops</option>
+						<option value="Corporate Event">Corporate Event</option>
+					</select>
+					</div>
+					<div class="form-holder" >
+						<select id="part" class="form-control" name="part" required>	
+						<option value="">NO OF PARTICIPANTS</option>						
+						<option value="10+">10+</option>
+						<option value="50+">50+</option>
+						<option value="200+">200+</option>
+						<option value="500+">500+</option>
+						<option value="5000+">5000+</option>
+					</select>
+					</div>
+					<div class="form-login">
+						<input class="submit-btn" type="submit" value="Book" >
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<script src="js/jquery-3.3.1.min.js"></script>
+		<script src="js/formmain.js"></script>
+		<script>
+
+window.addEventListener('load',function(){
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth() + 1; //January is 0!
+			if(mm==12){
+				var mm1= 2;
+			}
+			else{
+				var mm1= mm+2;
+			}
+			
+			var yyyy = today.getFullYear();
+
+			if (dd < 10) {
+			dd = '0' + dd;
+			}
+
+			if (mm < 10) {
+			mm = '0' + mm;
+			} 
+			if (mm1 < 10) {
+			mm1 = '0' + mm1;
+			} 
+				
+			today = yyyy + '-' + mm + '-' + dd;
+			booktill=yyyy + '-' + mm1 + '-' + dd;
+			document.getElementById("datefield").setAttribute("min", today);
+			document.getElementById("datefield").setAttribute("max", booktill); 
+
+			var name = document.getElementById("name");
+			var phone = document.getElementById("phone");
+			var venue = document.getElementById("venue");
+			var date = document.getElementById("datefield");
+			var event = document.getElementById("event");
+			var part = document.getElementById("part");
+			
+			name.addEventListener("input", (n) => {
+      		const nameval = n.currentTarget.value;
+     	 	if ( nameval.length<2 || name.validity.valueMissing ) {
+        		name.setCustomValidity("Name must be atleast 2 characters long.");
+        		name.reportValidity();
+      		} else { name.setCustomValidity(""); }
+		})
+
+			venue.addEventListener("input", (n) => {
+      		const venueval = n.currentTarget.value;
+     	 	if ( venueval.length<3 || venue.validity.valueMissing ) {
+				venue.setCustomValidity("Venue must be atleast 3 characters long.");
+				venue.reportValidity();
+      		} else { venue.setCustomValidity(""); }
+    });
+
+	phone.addEventListener("input", (n) => {
+      const phoneval = n.currentTarget.value;
+      var pattern= /^\d{10}$/;
+      if ( !phoneval.match(pattern) || phone.validity.valueMissing ) {
+        phone.setCustomValidity("Number should be a 10 digit number which we can contact on");
+        phone.reportValidity();
+      } else { phone.setCustomValidity(""); }
+    });
+
+		});
+
+			
+	
+			$("#booking").submit(function(e) {
+		
+				e.preventDefault(); // avoid to execute the actual submit of the form.
+		
+				var form = $(this);
+		
+		
+				$.ajax({
+					type: "post",
+					url: '/book',
+					data: form.serialize(), // serializes the form's elements.
+					success: function(data)
+					{
+					alert(data);
+					
+					if(data=="Event Booked! We will contact you within the next 2 hours for further planning"){
+               			location.reload();
+             			} // show response from the php script.
+					
+					}
+				});
+		
+			});
+
+			
+		
+			
+		</script>
+	</body>
+</html>
